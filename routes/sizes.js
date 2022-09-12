@@ -1,6 +1,19 @@
 const sizesRouter = require("express").Router();
 const connection = require("../config/db-config");
 
+sizesRouter.get("/", (req, res) => {
+  let sql = "SELECT * FROM sizes";
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error requesting GET sizes data");
+    } else {
+      res.status(200).json(result);
+      console.log(result);
+    }
+  });
+});
+
 sizesRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   let sql =
@@ -11,6 +24,7 @@ sizesRouter.get("/:id", (req, res) => {
       res.status(500).send("Error requesting GET sizes data");
     } else {
       res.status(200).json(result);
+      console.log(result);
     }
   });
 });

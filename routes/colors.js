@@ -1,6 +1,18 @@
 const colorsRouter = require("express").Router();
 const connection = require("../config/db-config");
 
+colorsRouter.get("/", (req, res) => {
+  let sql = "SELECT * FROM colors";
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error requesting GET colors data");
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 colorsRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   let sql =
