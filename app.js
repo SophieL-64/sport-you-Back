@@ -13,6 +13,8 @@ const clothesRouter = require("./routes/clothes");
 const sectionsRouter = require("./routes/sections");
 const colorsRouter = require("./routes/colors");
 const sizesRouter = require("./routes/sizes");
+const faqsRouter = require("./routes/faqs");
+const formInputsRouter = require("./routes/formInputs");
 
 connection.connect((err) => {
   if (err) {
@@ -34,6 +36,8 @@ app.use("/clothes", clothesRouter);
 app.use("/sections", sectionsRouter);
 app.use("/colors", colorsRouter);
 app.use("/sizes", sizesRouter);
+app.use("/faqs", faqsRouter);
+app.use("/formInputs", formInputsRouter);
 
 connection.connect((err) => {
   if (err) {
