@@ -6,7 +6,7 @@ Works with repository github 🔗 https://github.com/SophieL-64/sport-you-Front
 
 This is an e-commerce website, specialized in sport goods.
 
-Later, this application will allows you as admin to manage the goods which appear on the website.
+Later, this application will allow you as admin to manage the goods which appear on the website.
 You will be able to view/add/edit/delete goods.
 You also will have access to your customers feedbacks (opinions, complaints, questions).
 
@@ -31,7 +31,7 @@ Have a real customer listening policy thanks to their precious feedbacks.
 
     Database : mode.sql
 
-<img width="335" alt="Capture d’écran 2022 09 19 a 10h38" src="REMPLACER">
+<img width="335" alt="Capture d’écran 2022 09 19 a 10h38" src="https://user-images.githubusercontent.com/100852100/190982061-93609c7f-d619-468e-bca3-ef83a8091fcc.JPG">
 
 Installation
 
@@ -45,7 +45,7 @@ Installation
 
 :three: Set up .env with indications .env.sample = parameters necessary for the application to work.
 
-<img width="328" alt="Capture d’écran 2022 09 19 a 10h38" src="A REMPLACER">
+<img width="328" alt="Capture d’écran 2022 09 19 a 10h38" src="https://user-images.githubusercontent.com/100852100/190982282-24de2dba-62ac-4a3a-95e0-75ef5eca7907.JPG">
 
 :four: Lancement
 
