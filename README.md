@@ -31,8 +31,7 @@ Have a real customer listening policy thanks to their precious feedbacks.
 
     Database : mode.sql
 
-<img width="335" alt="Capture d’écran 2022 09 19 a 10h38" src="https://user-images.githubusercontent.com/100852100/190982061-93609c7f-d619-468e-bca3-ef83a8091fcc.JPG"
->
+<img width="335" alt="Capture d’écran 2022 09 19 a 10h38" src="https://user-images.githubusercontent.com/100852100/190982061-93609c7f-d619-468e-bca3-ef83a8091fcc.JPG">
 
 Installation
 
@@ -46,8 +45,7 @@ Installation
 
 :three: Set up .env with indications .env.sample = parameters necessary for the application to work.
 
-<img width="328" alt="Capture d’écran 2022 09 19 a 10h38" src="https://user-images.githubusercontent.com/100852100/190982282-24de2dba-62ac-4a3a-95e0-75ef5eca7907.JPG
-">
+<img width="328" alt="Capture d’écran 2022 09 19 a 10h38" src="https://user-images.githubusercontent.com/100852100/190982282-24de2dba-62ac-4a3a-95e0-75ef5eca7907.JPG">
 
 :four: Lancement
 
