@@ -13,6 +13,8 @@ const clothesRouter = require("./routes/clothes");
 const sectionsRouter = require("./routes/sections");
 const colorsRouter = require("./routes/colors");
 const sizesRouter = require("./routes/sizes");
+const brandsRouter = require("./routes/brands");
+const targetsRouter = require("./routes/targets");
 const faqsRouter = require("./routes/faqs");
 const formInputsRouter = require("./routes/formInputs");
 
@@ -36,6 +38,8 @@ app.use("/clothes", clothesRouter);
 app.use("/sections", sectionsRouter);
 app.use("/colors", colorsRouter);
 app.use("/sizes", sizesRouter);
+app.use("/brands", brandsRouter);
+app.use("/targets", targetsRouter);
 app.use("/faqs", faqsRouter);
 app.use("/formInputs", formInputsRouter);
 
