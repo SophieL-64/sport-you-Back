@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const morgan = require("morgan");
+const path = require("path");
 
 const port = process.env.PORT_SERVER || 5000;
 
@@ -32,6 +33,9 @@ connection.connect((err) => {
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+
+// utiliser le middleware express.static pour rendre possible l'accès aux fichiers de ce dossier via HTTP
+app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/clothes", clothesRouter);

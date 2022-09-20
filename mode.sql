@@ -68,7 +68,7 @@ CREATE TABLE `clothes` (
   CONSTRAINT `fk_clothes_brands1` FOREIGN KEY (`brands_id`) REFERENCES `brands` (`id`),
   CONSTRAINT `fk_clothes_sections1` FOREIGN KEY (`sections_id`) REFERENCES `sections` (`id`),
   CONSTRAINT `fk_clothes_targets1` FOREIGN KEY (`targets_id`) REFERENCES `targets` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,8 +94,8 @@ CREATE TABLE `clothes_has_colors` (
   PRIMARY KEY (`clothes_id`,`colors_id`),
   KEY `fk_clothes_has_colors_colors1_idx` (`colors_id`),
   KEY `fk_clothes_has_colors_clothes_idx` (`clothes_id`),
-  CONSTRAINT `fk_clothes_has_colors_clothes` FOREIGN KEY (`clothes_id`) REFERENCES `clothes` (`id`),
-  CONSTRAINT `fk_clothes_has_colors_colors1` FOREIGN KEY (`colors_id`) REFERENCES `colors` (`id`)
+  CONSTRAINT `fk_clothes_has_colors_clothes` FOREIGN KEY (`clothes_id`) REFERENCES `clothes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_clothes_has_colors_colors1` FOREIGN KEY (`colors_id`) REFERENCES `colors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,8 +122,8 @@ CREATE TABLE `clothes_has_sizes` (
   PRIMARY KEY (`clothes_id`,`sizes_id`),
   KEY `fk_clothes_has_sizes_sizes1_idx` (`sizes_id`),
   KEY `fk_clothes_has_sizes_clothes1_idx` (`clothes_id`),
-  CONSTRAINT `fk_clothes_has_sizes_clothes1` FOREIGN KEY (`clothes_id`) REFERENCES `clothes` (`id`),
-  CONSTRAINT `fk_clothes_has_sizes_sizes1` FOREIGN KEY (`sizes_id`) REFERENCES `sizes` (`id`)
+  CONSTRAINT `fk_clothes_has_sizes_clothes1` FOREIGN KEY (`clothes_id`) REFERENCES `clothes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_clothes_has_sizes_sizes1` FOREIGN KEY (`sizes_id`) REFERENCES `sizes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -208,7 +208,7 @@ CREATE TABLE `forminputs` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_formInputs_formInputsTypes1_idx` (`formInputsTypes_id`),
   CONSTRAINT `fk_formInputs_formInputsTypes1` FOREIGN KEY (`formInputsTypes_id`) REFERENCES `forminputstypes` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -217,7 +217,7 @@ CREATE TABLE `forminputs` (
 
 LOCK TABLES `forminputs` WRITE;
 /*!40000 ALTER TABLE `forminputs` DISABLE KEYS */;
-INSERT INTO `forminputs` VALUES (1,'Marc','','',5,'super produits, je recommande fortement',3),(2,'Sophie','Lamant','sophie.lamant31@gmail.com',4,'livraison rapide, produits conformes à la description',3),(3,'Véro','Lamant','vlamant@gmal.com',5,'je n\'achèterai mes articles de sport qu\'ici, à partir de maintenant. Un super plan !!!',3),(4,'Sophie','Lamant','sophie.lamant31@gmail.com',NULL,'ffff',2),(5,'Sophie','Lamant','sophie.lamant31@gmail.com',NULL,'c\'est un test',2),(6,'Sophie','Lamant','sophie.lamant31@gmail.com',1,'nul',3),(7,'Véro','Aiello','sophie.lamant31@gmail.com',3,'à vomir',3),(8,'Gégé','Raldine','g@gmail.com',4,'Super, site, VRAIMENT !',3),(9,'Lola','Gérard','l@gmail.com',5,'J\'adore faire mon shopping ici, pur les enfants, c\'est top !',3),(10,'Joshua','Lamant','sophie.lamant31@gmail.com',5,'Coucou, c\'est super !!!',3);
+INSERT INTO `forminputs` VALUES (1,'Marc','','',5,'super produits, je recommande fortement',3),(2,'Sophie','Lamant','sophie.lamant31@gmail.com',4,'livraison rapide, produits conformes à la description',3),(3,'Véro','Lamant','vlamant@gmal.com',5,'je n\'achèterai mes articles de sport qu\'ici, à partir de maintenant. Un super plan !!!',3),(4,'Sophie','Lamant','sophie.lamant31@gmail.com',NULL,'ffff',2),(5,'Sophie','Lamant','sophie.lamant31@gmail.com',NULL,'c\'est un test',2),(6,'Sophie','Lamant','sophie.lamant31@gmail.com',1,'nul',3),(7,'Véro','Aiello','sophie.lamant31@gmail.com',3,'à vomir',3),(8,'Gégé','Raldine','g@gmail.com',4,'Super, site, VRAIMENT !',3),(9,'Lola','Gérard','l@gmail.com',5,'J\'adore faire mon shopping ici, pur les enfants, c\'est top !',3),(10,'Joshua','Lamant','sophie.lamant31@gmail.com',5,'Coucou, c\'est super !!!',3),(11,'Thomas','Snakesamurai','sophie.lamant31@gmail.com',4,'Super',3),(12,'Sophie','Lamant','sophie.lamant31@gmail.com',2,'nul',3);
 /*!40000 ALTER TABLE `forminputs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -330,4 +330,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-09-19 10:35:42
+-- Dump completed on 2022-09-20 11:59:00

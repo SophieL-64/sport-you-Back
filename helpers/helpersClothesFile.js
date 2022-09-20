@@ -3,7 +3,7 @@ const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, "./public/images");
+    callback(null, "./public/images/clothes");
   },
   filename: (req, file, callback) => {
     const uniqueSuffix = "" + Math.round(Math.random() * 1e9);

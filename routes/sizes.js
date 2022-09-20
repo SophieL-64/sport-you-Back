@@ -14,6 +14,21 @@ sizesRouter.get("/", (req, res) => {
   });
 });
 
+// GET POUR AFFICHAGE TAILLES ATTACHEES A UNE CLOTHE DANS INTERFACE ADMIN EDIT
+sizesRouter.get("/clotheEdit/:id", (req, res) => {
+  const { id } = req.params;
+  let sql =
+    "SELECT chs.clothes_id, chs.sizes_id FROM clothes_has_sizes AS chs JOIN clothes AS c ON c.id = chs.clothes_id WHERE c.id = ?";
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error requesting GET sizes data");
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 sizesRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   let sql =
