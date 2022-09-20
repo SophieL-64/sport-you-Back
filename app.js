@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const morgan = require("morgan");
+const path = require("path");
 
 const port = process.env.PORT_SERVER || 5000;
 
@@ -13,6 +14,8 @@ const clothesRouter = require("./routes/clothes");
 const sectionsRouter = require("./routes/sections");
 const colorsRouter = require("./routes/colors");
 const sizesRouter = require("./routes/sizes");
+const brandsRouter = require("./routes/brands");
+const targetsRouter = require("./routes/targets");
 const faqsRouter = require("./routes/faqs");
 const formInputsRouter = require("./routes/formInputs");
 
@@ -31,11 +34,16 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
+// utiliser le middleware express.static pour rendre possible l'accès aux fichiers de ce dossier via HTTP
+app.use(express.static(path.join(__dirname, "public")));
+
 // Routes
 app.use("/clothes", clothesRouter);
 app.use("/sections", sectionsRouter);
 app.use("/colors", colorsRouter);
 app.use("/sizes", sizesRouter);
+app.use("/brands", brandsRouter);
+app.use("/targets", targetsRouter);
 app.use("/faqs", faqsRouter);
 app.use("/formInputs", formInputsRouter);
 

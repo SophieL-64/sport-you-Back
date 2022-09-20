@@ -15,7 +15,7 @@ formInputsRouter.get("/inputTypes", (req, res) => {
 
 formInputsRouter.get("/opinions", (req, res) => {
   let sql =
-    "SELECT f.firstname, f.rate, f.comment FROM formInputs AS f WHERE formInputsTypes_id=3 AND rate >=4";
+    "SELECT f.id, f.firstname, f.rate, f.comment FROM formInputs AS f WHERE formInputsTypes_id=3 AND rate >=4";
   connection.query(sql, (err, result) => {
     if (err) {
       console.error(err);
