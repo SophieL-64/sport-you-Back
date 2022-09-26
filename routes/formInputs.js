@@ -40,7 +40,7 @@ formInputsRouter.post("/add", (req, res) => {
           status: false,
           message: "there are some error with query",
         });
-        console.log(err);
+        console.log("err", err);
       } else {
         console.log("Saved successfully");
         res.json({ success: 1 });
