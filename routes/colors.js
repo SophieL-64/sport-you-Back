@@ -1,6 +1,19 @@
 const colorsRouter = require("express").Router();
 const connection = require("../config/db-config");
 
+// GET POUR PANNEAU ADMIN AdminColors
+colorsRouter.get("/colorsAdmin", (req, res) => {
+  let sql = "SELECT * FROM colors";
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error retrieving data from database");
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 colorsRouter.get("/", (req, res) => {
   let sql = "SELECT * FROM colors";
   connection.query(sql, (err, result) => {
@@ -40,6 +53,38 @@ colorsRouter.get("/:id", (req, res) => {
       res.status(200).json(result);
     }
   });
+});
+
+// DELETE /////////////////////////////////
+
+colorsRouter.delete("/:id", async (req, res) => {
+  const colorId = req.params.id;
+  console.log("colorId", colorId);
+
+  const [[imageOldPath]] = await connection
+    .promise()
+    .query("SELECT image FROM colors WHERE id = ? ", [colorId]);
+  console.log("imageOldPath.image", imageOldPath.image);
+  const oldFile = imageOldPath.image;
+
+  connection.query(
+    "DELETE FROM colors WHERE id = ?",
+    [colorId],
+    (err, result) => {
+      if (err) {
+        console.log("err", err);
+        res.status(500).send("😱 Error deleting a color");
+      } else {
+        fs.unlinkSync("./public/images/colors/" + oldFile, (err) => {
+          if (err) {
+            throw err;
+          }
+          console.log("Delete File successfully.");
+        });
+        res.sendStatus(204);
+      }
+    }
+  );
 });
 
 module.exports = colorsRouter;
