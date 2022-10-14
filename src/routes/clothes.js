@@ -1,6 +1,7 @@
 const clothesRouter = require("express").Router();
 const connection = require("../config/db-config");
 const { upload } = require("../helpers/helpersClothesFile");
+const checkJwt = require("../middlewares/checkJwt");
 const fs = require("fs");
 
 // GET POUR PANNEAU ADMIN AdminClothes
@@ -35,7 +36,7 @@ clothesRouter.get("/", (req, res) => {
 // GET POUR AFFICHAGE ARTICLES DANS INTERFACE ADMIN EDIT
 clothesRouter.get("/edit/:id", (req, res) => {
   const { id } = req.params;
-  let sql = "SELECT * FROM clothes AS c WHERE c.id=?";
+  let sql = "SELECT * FROM clothes WHERE id=?";
   connection.query(sql, [id], (err, result) => {
     if (err) {
       console.error(err);
@@ -64,7 +65,8 @@ clothesRouter.get("/:id", (req, res) => {
 
 // POST
 clothesRouter.post(
-  "/add",
+  "/",
+  checkJwt,
   upload,
   // validatePostClothes,
   (req, res) => {
@@ -155,7 +157,7 @@ clothesRouter.post(
 
 // PUT
 clothesRouter.put(
-  "/edit/:id",
+  "/:id",
   upload,
   // validatePostClothes,
   async (req, res) => {

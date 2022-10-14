@@ -28,7 +28,7 @@ targetsRouter.get("/", (req, res) => {
 
 // POST
 targetsRouter.post(
-  "/add",
+  "/",
   // validatePostClothes,
   (req, res) => {
     console.log("req.body de targetAdd", req.body);

@@ -26,7 +26,7 @@ formInputsRouter.get("/opinions", (req, res) => {
   });
 });
 
-formInputsRouter.post("/add", (req, res) => {
+formInputsRouter.post("/", (req, res) => {
   let { firstname, name, email, rate, comment, formInputsTypes_id } = req.body;
 
   console.log("req.body", req.body);

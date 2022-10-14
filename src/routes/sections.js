@@ -44,7 +44,7 @@ sectionsRouter.get("/:id", (req, res) => {
 
 // POST
 sectionsRouter.post(
-  "/add",
+  "/",
   // validatePostClothes,
   (req, res) => {
     console.log("req.body de sectionAdd", req.body);
