@@ -1,8 +1,9 @@
 const sizesRouter = require("express").Router();
 const connection = require("../config/db-config");
+const checkJwt = require("../middlewares/checkJwt");
 
 // GET POUR PANNEAU ADMIN AdminSizes
-sizesRouter.get("/sizesAdmin", (req, res) => {
+sizesRouter.get("/sizesAdmin", checkJwt, (req, res) => {
   let sql = "SELECT * FROM sizes";
   connection.query(sql, (err, result) => {
     if (err) {
@@ -14,6 +15,7 @@ sizesRouter.get("/sizesAdmin", (req, res) => {
   });
 });
 
+// INTERFACE UTILISATEURS
 sizesRouter.get("/", (req, res) => {
   let sql = "SELECT * FROM sizes";
   connection.query(sql, (err, result) => {
@@ -28,7 +30,7 @@ sizesRouter.get("/", (req, res) => {
 });
 
 // GET POUR AFFICHAGE TAILLES ATTACHEES A UNE CLOTHE DANS INTERFACE ADMIN EDIT
-sizesRouter.get("/clotheEdit/:id", (req, res) => {
+sizesRouter.get("/clotheEdit/:id", checkJwt, (req, res) => {
   const { id } = req.params;
   let sql =
     "SELECT chs.clothes_id, chs.sizes_id FROM clothes_has_sizes AS chs JOIN clothes AS c ON c.id = chs.clothes_id WHERE c.id = ?";
@@ -44,7 +46,8 @@ sizesRouter.get("/clotheEdit/:id", (req, res) => {
 
 // POST
 sizesRouter.post(
-  "/add",
+  "/",
+  checkJwt,
   // validatePostClothes,
   (req, res) => {
     console.log("req.body de sizeAdd", req.body);
@@ -82,7 +85,7 @@ sizesRouter.get("/:id", (req, res) => {
 
 // DELETE /////////////////////////////////
 
-sizesRouter.delete("/:id", async (req, res) => {
+sizesRouter.delete("/:id", checkJwt, async (req, res) => {
   const sizeId = req.params.id;
   console.log("sizeId", sizeId);
 

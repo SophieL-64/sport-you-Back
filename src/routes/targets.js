@@ -1,8 +1,9 @@
 const targetsRouter = require("express").Router();
 const connection = require("../config/db-config");
+const checkJwt = require("../middlewares/checkJwt");
 
 // GET POUR PANNEAU ADMIN AdminTargets
-targetsRouter.get("/targetsAdmin", (req, res) => {
+targetsRouter.get("/targetsAdmin", checkJwt, (req, res) => {
   let sql = "SELECT * FROM targets";
   connection.query(sql, (err, result) => {
     if (err) {
@@ -14,6 +15,7 @@ targetsRouter.get("/targetsAdmin", (req, res) => {
   });
 });
 
+// INTERFACE UTILISATEURS
 targetsRouter.get("/", (req, res) => {
   let sql = "SELECT * from targets;";
   connection.query(sql, (err, result) => {
@@ -28,7 +30,8 @@ targetsRouter.get("/", (req, res) => {
 
 // POST
 targetsRouter.post(
-  "/add",
+  "/",
+  checkJwt,
   // validatePostClothes,
   (req, res) => {
     console.log("req.body de targetAdd", req.body);
@@ -51,7 +54,7 @@ targetsRouter.post(
 
 // DELETE /////////////////////////////////
 
-targetsRouter.delete("/:id", async (req, res) => {
+targetsRouter.delete("/:id", checkJwt, async (req, res) => {
   const targetId = req.params.id;
   console.log("targetId", targetId);
 

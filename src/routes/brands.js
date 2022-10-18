@@ -1,20 +1,9 @@
 const brandsRouter = require("express").Router();
 const connection = require("../config/db-config");
+const checkJwt = require("../middlewares/checkJwt");
 
 // GET POUR PANNEAU ADMIN AdminBrands
-brandsRouter.get("/brandsAdmin", (req, res) => {
-  let sql = "SELECT * FROM brands";
-  connection.query(sql, (err, result) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Error retrieving data from database");
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
-
-brandsRouter.get("/", (req, res) => {
+brandsRouter.get("/", checkJwt, (req, res) => {
   let sql = "SELECT * from brands;";
   connection.query(sql, (err, result) => {
     if (err) {
@@ -28,7 +17,7 @@ brandsRouter.get("/", (req, res) => {
 
 // DELETE /////////////////////////////////
 
-brandsRouter.delete("/:id", async (req, res) => {
+brandsRouter.delete("/:id", checkJwt, async (req, res) => {
   const brandId = req.params.id;
   console.log("brandId", brandId);
 

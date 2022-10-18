@@ -18,6 +18,7 @@ const brandsRouter = require("./routes/brands");
 const targetsRouter = require("./routes/targets");
 const faqsRouter = require("./routes/faqs");
 const formInputsRouter = require("./routes/formInputs");
+const adminsRouter = require("./routes/admins");
 
 connection.connect((err) => {
   if (err) {
@@ -33,9 +34,8 @@ connection.connect((err) => {
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
-
 // utiliser le middleware express.static pour rendre possible l'accès aux fichiers de ce dossier via HTTP
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
 
 // Routes
 app.use("/clothes", clothesRouter);
@@ -46,6 +46,7 @@ app.use("/brands", brandsRouter);
 app.use("/targets", targetsRouter);
 app.use("/faqs", faqsRouter);
 app.use("/formInputs", formInputsRouter);
+app.use("/admins", adminsRouter);
 
 connection.connect((err) => {
   if (err) {

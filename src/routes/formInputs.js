@@ -1,6 +1,8 @@
 const formInputsRouter = require("express").Router();
 const connection = require("../config/db-config");
+const checkJwt = require("../middlewares/checkJwt");
 
+// INTERFACE UTILISATEURS
 formInputsRouter.get("/inputTypes", (req, res) => {
   let sql = "SELECT * FROM formInputsTypes";
   connection.query(sql, (err, result) => {
@@ -13,6 +15,7 @@ formInputsRouter.get("/inputTypes", (req, res) => {
   });
 });
 
+// INTERFACE UTILISATEURS
 formInputsRouter.get("/opinions", (req, res) => {
   let sql =
     "SELECT f.id, f.firstname, f.rate, f.comment FROM formInputs AS f WHERE formInputsTypes_id=3 AND rate >=4";
@@ -26,7 +29,8 @@ formInputsRouter.get("/opinions", (req, res) => {
   });
 });
 
-formInputsRouter.post("/add", (req, res) => {
+// AJOUT DEPUIS INTERFACE UTILISATEURS
+formInputsRouter.post("/", (req, res) => {
   let { firstname, name, email, rate, comment, formInputsTypes_id } = req.body;
 
   console.log("req.body", req.body);
