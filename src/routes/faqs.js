@@ -1,6 +1,8 @@
 const faqsRouter = require("express").Router();
 const connection = require("../config/db-config");
+const checkJwt = require("../middlewares/checkJwt");
 
+// INTERFACE UTILISATEURS
 faqsRouter.get("/", (req, res) => {
   let sql = "SELECT * FROM faqs";
   connection.query(sql, (err, result) => {

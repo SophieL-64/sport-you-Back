@@ -5,7 +5,7 @@ const checkJwt = require("../middlewares/checkJwt");
 const fs = require("fs");
 
 // GET POUR PANNEAU ADMIN AdminClothes
-clothesRouter.get("/clothesAdmin", (req, res) => {
+clothesRouter.get("/clothesAdmin", checkJwt, (req, res) => {
   let sql =
     "SELECT c.*, b.name AS brand, t.name AS target, s.name AS section FROM clothes  AS c JOIN brands AS b ON c.brands_id=b.id JOIN targets AS t ON c.targets_id=t.id JOIN sections AS s ON c.sections_id=s.id";
   connection.query(sql, (err, result) => {
@@ -34,13 +34,13 @@ clothesRouter.get("/", (req, res) => {
 });
 
 // GET POUR AFFICHAGE ARTICLES DANS INTERFACE ADMIN EDIT
-clothesRouter.get("/edit/:id", (req, res) => {
+clothesRouter.get("/edit/:id", checkJwt, (req, res) => {
   const { id } = req.params;
   let sql = "SELECT * FROM clothes WHERE id=?";
   connection.query(sql, [id], (err, result) => {
     if (err) {
       console.error(err);
-      res.status(500).send("Error requesting GET sections data");
+      res.status(500).send("Error requesting GET clothes data");
     } else {
       res.status(200).json(result);
     }
@@ -158,6 +158,7 @@ clothesRouter.post(
 // PUT
 clothesRouter.put(
   "/:id",
+  checkJwt,
   upload,
   // validatePostClothes,
   async (req, res) => {
@@ -279,7 +280,7 @@ clothesRouter.put(
 
 // DELETE (incluant tables de jointure Sizes & colors) /////////////////////////////////
 
-clothesRouter.delete("/:id", async (req, res) => {
+clothesRouter.delete("/:id", checkJwt, async (req, res) => {
   const clotheId = req.params.id;
   console.log("clotheId", clotheId);
 

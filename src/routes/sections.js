@@ -1,8 +1,9 @@
 const sectionsRouter = require("express").Router();
 const connection = require("../config/db-config");
+const checkJwt = require("../middlewares/checkJwt");
 
 // GET POUR PANNEAU ADMIN AdminSections
-sectionsRouter.get("/sectionsAdmin", (req, res) => {
+sectionsRouter.get("/sectionsAdmin", checkJwt, (req, res) => {
   let sql = "SELECT * FROM sections";
   connection.query(sql, (err, result) => {
     if (err) {
@@ -14,6 +15,7 @@ sectionsRouter.get("/sectionsAdmin", (req, res) => {
   });
 });
 
+// INTERFACE UTILISATEURS
 sectionsRouter.get("/", (req, res) => {
   //Select tte les tables de la BDD//
   let sql = "SELECT * from sections;";
@@ -27,6 +29,7 @@ sectionsRouter.get("/", (req, res) => {
   });
 });
 
+// INTERFACE UTILISATEURS
 sectionsRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   //Select tte les tables de la BDD//
@@ -45,6 +48,7 @@ sectionsRouter.get("/:id", (req, res) => {
 // POST
 sectionsRouter.post(
   "/",
+  checkJwt,
   // validatePostClothes,
   (req, res) => {
     console.log("req.body de sectionAdd", req.body);
@@ -67,7 +71,7 @@ sectionsRouter.post(
 
 // DELETE /////////////////////////////////
 
-sectionsRouter.delete("/:id", async (req, res) => {
+sectionsRouter.delete("/:id", checkJwt, async (req, res) => {
   const sectionId = req.params.id;
   console.log("sectionId", sectionId);
 
