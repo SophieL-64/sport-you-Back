@@ -84,8 +84,8 @@ colorsRouter.post(
     let { name } = req.body;
     const image = req.files.image[0].filename;
 
-    console.log("req.body de colorssAdd", req.body);
-    console.log("image colorsAdd", image);
+    // console.log("req.body de colorsAdd", req.body);
+    // console.log("image colorsAdd", image);
 
     const sqlAdd = "INSERT INTO colors(name, image) VALUES (?, ?)";
     connection.query(sqlAdd, [name, image], (error, result) => {
@@ -124,6 +124,7 @@ colorsRouter.put(
     const [[imagePUTOldPath]] = await connection
       .promise()
       .query("SELECT image FROM colors WHERE id = ? ", [id]);
+    console.log("imagePUTOldPath.image", imagePUTOldPath.image);
     const oldPUTFile = imagePUTOldPath.image;
 
     if (Object.keys(colors).length) {
@@ -157,7 +158,7 @@ colorsRouter.put(
 
 colorsRouter.delete("/:id", checkJwt, async (req, res) => {
   const colorId = req.params.id;
-  console.log("colorId", colorId);
+  // console.log("colorId", colorId);
 
   const [[imageOldPath]] = await connection
     .promise()

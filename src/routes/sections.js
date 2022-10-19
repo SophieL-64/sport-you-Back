@@ -45,13 +45,27 @@ sectionsRouter.get("/:id", (req, res) => {
   });
 });
 
+// GET POUR AFFICHAGE COULEURS DANS INTERFACE ADMIN EDIT
+sectionsRouter.get("/edit/:id", checkJwt, (req, res) => {
+  const { id } = req.params;
+  let sql = "SELECT * FROM sections WHERE id=?";
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error requesting GET sections data");
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 // POST
 sectionsRouter.post(
   "/",
   checkJwt,
   // validatePostClothes,
   (req, res) => {
-    console.log("req.body de sectionAdd", req.body);
+    // console.log("req.body de sectionAdd", req.body);
     const { name } = req.body;
 
     const sqlAdd = "INSERT INTO sections (name) VALUES (?)";
@@ -69,11 +83,39 @@ sectionsRouter.post(
   }
 );
 
+// PUT
+sectionsRouter.put(
+  "/:id",
+  checkJwt,
+  // validatePutColors,
+  async (req, res) => {
+    const { id } = req.params;
+    const sectionsPropsToUpdate = req.body;
+
+    connection.query(
+      "UPDATE sections SET ? WHERE id = ?",
+      [sectionsPropsToUpdate, id],
+      (err, result) => {
+        if (err) {
+          res.json({
+            status: false,
+            message: "there are some error with query",
+          });
+          console.log(err);
+        } else {
+          console.log("Saved successfully");
+          return res.status(200).json({ success: 1 });
+        }
+      }
+    );
+  }
+);
+
 // DELETE /////////////////////////////////
 
 sectionsRouter.delete("/:id", checkJwt, async (req, res) => {
   const sectionId = req.params.id;
-  console.log("sectionId", sectionId);
+  // console.log("sectionId", sectionId);
 
   connection.query(
     "DELETE FROM sections WHERE id = ?",

@@ -33,7 +33,7 @@ formInputsRouter.get("/opinions", (req, res) => {
 formInputsRouter.post("/", (req, res) => {
   let { firstname, name, email, rate, comment, formInputsTypes_id } = req.body;
 
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
   connection.query(
     "INSERT INTO formInputs (firstname, name, email, rate, comment, formInputsTypes_id) VALUES (?, ?, ?, ?, ?, ?)",
     [firstname, name, email, rate, comment, formInputsTypes_id],

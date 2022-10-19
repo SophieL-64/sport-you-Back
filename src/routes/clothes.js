@@ -83,8 +83,8 @@ clothesRouter.post(
 
     const image = req.files.image[0].filename;
 
-    console.log("req.body de clothesAdd", req.body);
-    console.log("image clothesAdd", image);
+    // console.log("req.body de clothesAdd", req.body);
+    // console.log("image clothesAdd", image);
 
     const sqlAdd =
       "INSERT INTO clothes(name, description, image, price, sections_id, brands_id, targets_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -165,7 +165,7 @@ clothesRouter.put(
     const { id } = req.params;
     const sqlPut = "UPDATE clothes SET ? WHERE id = ?";
     const clothes = { ...req.body };
-    console.log("clothes", clothes);
+    // console.log("clothes", clothes);
     delete clothes.sizesAvailables;
     delete clothes.colorsAvailables;
     let sizesAvailables = req.body.sizesAvailables.split(",");
@@ -218,7 +218,7 @@ clothesRouter.put(
     }
 
     if (colorsAvailables.length) {
-      console.log("else", typeof colorsAvailables);
+      // console.log("else", typeof colorsAvailables);
       connection.query(
         "DELETE FROM clothes_has_colors WHERE clothes_id = ?",
         [id],
@@ -282,7 +282,7 @@ clothesRouter.put(
 
 clothesRouter.delete("/:id", checkJwt, async (req, res) => {
   const clotheId = req.params.id;
-  console.log("clotheId", clotheId);
+  // console.log("clotheId", clotheId);
 
   const [[imageOldPath]] = await connection
     .promise()

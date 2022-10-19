@@ -28,13 +28,55 @@ targetsRouter.get("/", (req, res) => {
   });
 });
 
+// GET POUR AFFICHAGE CIBLES COMMERCIALES DANS INTERFACE ADMIN EDIT
+targetsRouter.get("/edit/:id", checkJwt, (req, res) => {
+  const { id } = req.params;
+  let sql = "SELECT * FROM targets WHERE id=?";
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error requesting GET targets data");
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+// PUT
+targetsRouter.put(
+  "/:id",
+  checkJwt,
+  // validatePutColors,
+  async (req, res) => {
+    const { id } = req.params;
+    const targetsPropsToUpdate = req.body;
+
+    connection.query(
+      "UPDATE targets SET ? WHERE id = ?",
+      [targetsPropsToUpdate, id],
+      (err, result) => {
+        if (err) {
+          res.json({
+            status: false,
+            message: "there are some error with query",
+          });
+          console.log(err);
+        } else {
+          console.log("Saved successfully");
+          return res.status(200).json({ success: 1 });
+        }
+      }
+    );
+  }
+);
+
 // POST
 targetsRouter.post(
   "/",
   checkJwt,
   // validatePostClothes,
   (req, res) => {
-    console.log("req.body de targetAdd", req.body);
+    // console.log("req.body de targetAdd", req.body);
     const { name } = req.body;
 
     const sqlAdd = "INSERT INTO targets (name) VALUES (?)";
@@ -56,7 +98,7 @@ targetsRouter.post(
 
 targetsRouter.delete("/:id", checkJwt, async (req, res) => {
   const targetId = req.params.id;
-  console.log("targetId", targetId);
+  // console.log("targetId", targetId);
 
   connection.query(
     "DELETE FROM targets WHERE id = ?",

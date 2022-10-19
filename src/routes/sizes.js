@@ -24,7 +24,7 @@ sizesRouter.get("/", (req, res) => {
       res.status(500).send("Error requesting GET sizes data");
     } else {
       res.status(200).json(result);
-      console.log("result", result);
+      // console.log("result", result);
     }
   });
 });
@@ -44,13 +44,29 @@ sizesRouter.get("/clotheEdit/:id", checkJwt, (req, res) => {
   });
 });
 
+// INTERFACE UTILISATEURS
+sizesRouter.get("/:id", (req, res) => {
+  const { id } = req.params;
+  let sql =
+    "SELECT s.size, s.id FROM sizes AS s JOIN clothes_has_sizes AS chs ON s.id = chs.sizes_id JOIN clothes AS c ON chs.clothes_id = c.id WHERE c.id=?";
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error requesting GET sizes data");
+    } else {
+      res.status(200).json(result);
+      console.log("result", result);
+    }
+  });
+});
+
 // POST
 sizesRouter.post(
   "/",
   checkJwt,
   // validatePostClothes,
   (req, res) => {
-    console.log("req.body de sizeAdd", req.body);
+    // console.log("req.body de sizeAdd", req.body);
     const { size } = req.body;
 
     const sqlAdd = "INSERT INTO sizes (size) VALUES (?)";
@@ -68,26 +84,11 @@ sizesRouter.post(
   }
 );
 
-sizesRouter.get("/:id", (req, res) => {
-  const { id } = req.params;
-  let sql =
-    "SELECT s.size, s.id FROM sizes AS s JOIN clothes_has_sizes AS chs ON s.id = chs.sizes_id JOIN clothes AS c ON chs.clothes_id = c.id WHERE c.id=?";
-  connection.query(sql, [id], (err, result) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Error requesting GET sizes data");
-    } else {
-      res.status(200).json(result);
-      console.log("result", result);
-    }
-  });
-});
-
 // DELETE /////////////////////////////////
 
 sizesRouter.delete("/:id", checkJwt, async (req, res) => {
   const sizeId = req.params.id;
-  console.log("sizeId", sizeId);
+  // console.log("sizeId", sizeId);
 
   connection.query(
     "DELETE FROM sizes WHERE id = ?",
