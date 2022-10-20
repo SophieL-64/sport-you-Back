@@ -2,6 +2,10 @@ const colorsRouter = require("express").Router();
 const connection = require("../config/db-config");
 const { upload } = require("../helpers/helpersColorsFile");
 const checkJwt = require("../middlewares/checkJwt");
+const {
+  validateColorsPost,
+  validateColorsPut,
+} = require("../middlewares/validators/validatorColors");
 const fs = require("fs");
 
 // GET POUR PANNEAU ADMIN AdminColors
@@ -75,39 +79,33 @@ colorsRouter.get("/:id", (req, res) => {
 });
 
 // POST
-colorsRouter.post(
-  "/",
-  checkJwt,
-  upload,
-  // validatePostColors,
-  (req, res) => {
-    let { name } = req.body;
-    const image = req.files.image[0].filename;
+colorsRouter.post("/", checkJwt, upload, validateColorsPost, (req, res) => {
+  let { name } = req.body;
+  const image = req.files.image[0].filename;
 
-    // console.log("req.body de colorsAdd", req.body);
-    // console.log("image colorsAdd", image);
+  // console.log("req.body de colorsAdd", req.body);
+  // console.log("image colorsAdd", image);
 
-    const sqlAdd = "INSERT INTO colors(name, image) VALUES (?, ?)";
-    connection.query(sqlAdd, [name, image], (error, result) => {
-      if (error) {
-        res.status(500).json({
-          status: false,
-          message: "there are some error with query colorsAdd",
-        });
-        console.log("error", error);
-      } else {
-        res.status(200).json({ success: 1 });
-      }
-    });
-  }
-);
+  const sqlAdd = "INSERT INTO colors(name, image) VALUES (?, ?)";
+  connection.query(sqlAdd, [name, image], (error, result) => {
+    if (error) {
+      res.status(500).json({
+        status: false,
+        message: "there are some error with query colorsAdd",
+      });
+      console.log("error", error);
+    } else {
+      res.status(200).json({ success: 1 });
+    }
+  });
+});
 
 // PUT
 colorsRouter.put(
   "/:id",
   checkJwt,
   upload,
-  // validatePutColors,
+  validateColorsPut,
   async (req, res) => {
     const { id } = req.params;
     const sqlPut = "UPDATE colors SET ? WHERE id = ?";

@@ -2,6 +2,10 @@ const brandsRouter = require("express").Router();
 const connection = require("../config/db-config");
 const checkJwt = require("../middlewares/checkJwt");
 const { upload } = require("../helpers/helpersBrandsFile");
+const {
+  validateBrandsPost,
+  validateBrandsPut,
+} = require("../middlewares/validators/validatorBrands");
 const fs = require("fs");
 
 // GET POUR PANNEAU ADMIN AdminBrands
@@ -32,39 +36,33 @@ brandsRouter.get("/edit/:id", checkJwt, (req, res) => {
 });
 
 // POST
-brandsRouter.post(
-  "/",
-  checkJwt,
-  upload,
-  // validatePostColors,
-  (req, res) => {
-    let { name, country } = req.body;
-    const image = req.files.logo[0].filename;
+brandsRouter.post("/", checkJwt, upload, validateBrandsPost, (req, res) => {
+  let { name, country } = req.body;
+  const image = req.files.logo[0].filename;
 
-    // console.log("req.body de brandsAdd", req.body);
-    // console.log("image brandsAdd", image);
+  // console.log("req.body de brandsAdd", req.body);
+  // console.log("image brandsAdd", image);
 
-    const sqlAdd = "INSERT INTO brands(name, logo, country) VALUES (?, ?, ?)";
-    connection.query(sqlAdd, [name, image, country], (error, result) => {
-      if (error) {
-        res.status(500).json({
-          status: false,
-          message: "there are some error with query brandsAdd",
-        });
-        console.log("error", error);
-      } else {
-        res.status(200).json({ success: 1 });
-      }
-    });
-  }
-);
+  const sqlAdd = "INSERT INTO brands(name, logo, country) VALUES (?, ?, ?)";
+  connection.query(sqlAdd, [name, image, country], (error, result) => {
+    if (error) {
+      res.status(500).json({
+        status: false,
+        message: "there are some error with query brandsAdd",
+      });
+      console.log("error", error);
+    } else {
+      res.status(200).json({ success: 1 });
+    }
+  });
+});
 
 // PUT
 brandsRouter.put(
   "/:id",
   checkJwt,
   upload,
-  // validatePutColors,
+  validateBrandsPut,
   async (req, res) => {
     const { id } = req.params;
     const sqlPut = "UPDATE brands SET ? WHERE id = ?";

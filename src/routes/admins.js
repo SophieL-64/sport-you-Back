@@ -8,7 +8,7 @@ const { generateJwt } = require("../utils/auth");
 const {
   validateAdminLogging,
   validateAdminRegistering,
-} = require("../middlewares/validators/validatorAdmin");
+} = require("../middlewares/validators/validatorAdmins");
 
 // INTERFACE ADMIN
 adminsRouter.get("/", checkJwt, (req, res) => {

@@ -1,6 +1,10 @@
 const sectionsRouter = require("express").Router();
 const connection = require("../config/db-config");
 const checkJwt = require("../middlewares/checkJwt");
+const {
+  validateSectionsPost,
+  validateSectionsPut,
+} = require("../middlewares/validators/validatorSections");
 
 // GET POUR PANNEAU ADMIN AdminSections
 sectionsRouter.get("/sectionsAdmin", checkJwt, (req, res) => {
@@ -60,56 +64,46 @@ sectionsRouter.get("/edit/:id", checkJwt, (req, res) => {
 });
 
 // POST
-sectionsRouter.post(
-  "/",
-  checkJwt,
-  // validatePostClothes,
-  (req, res) => {
-    // console.log("req.body de sectionAdd", req.body);
-    const { name } = req.body;
+sectionsRouter.post("/", checkJwt, validateSectionsPost, (req, res) => {
+  // console.log("req.body de sectionAdd", req.body);
+  const { name } = req.body;
 
-    const sqlAdd = "INSERT INTO sections (name) VALUES (?)";
-    connection.query(sqlAdd, [name], (error, result) => {
-      if (error) {
-        res.status(500).json({
-          status: false,
-          message: "there are some error with query sectionsAdd",
-        });
-        console.log("error", error);
-      } else {
-        res.status(200).json({ success: 1 });
-      }
-    });
-  }
-);
+  const sqlAdd = "INSERT INTO sections (name) VALUES (?)";
+  connection.query(sqlAdd, [name], (error, result) => {
+    if (error) {
+      res.status(500).json({
+        status: false,
+        message: "there are some error with query sectionsAdd",
+      });
+      console.log("error", error);
+    } else {
+      res.status(200).json({ success: 1 });
+    }
+  });
+});
 
 // PUT
-sectionsRouter.put(
-  "/:id",
-  checkJwt,
-  // validatePutColors,
-  async (req, res) => {
-    const { id } = req.params;
-    const sectionsPropsToUpdate = req.body;
+sectionsRouter.put("/:id", checkJwt, validateSectionsPut, async (req, res) => {
+  const { id } = req.params;
+  const sectionsPropsToUpdate = req.body;
 
-    connection.query(
-      "UPDATE sections SET ? WHERE id = ?",
-      [sectionsPropsToUpdate, id],
-      (err, result) => {
-        if (err) {
-          res.json({
-            status: false,
-            message: "there are some error with query",
-          });
-          console.log(err);
-        } else {
-          console.log("Saved successfully");
-          return res.status(200).json({ success: 1 });
-        }
+  connection.query(
+    "UPDATE sections SET ? WHERE id = ?",
+    [sectionsPropsToUpdate, id],
+    (err, result) => {
+      if (err) {
+        res.json({
+          status: false,
+          message: "there are some error with query",
+        });
+        console.log(err);
+      } else {
+        console.log("Saved successfully");
+        return res.status(200).json({ success: 1 });
       }
-    );
-  }
-);
+    }
+  );
+});
 
 // DELETE /////////////////////////////////
 

@@ -17,7 +17,7 @@ const sizesRouter = require("./routes/sizes");
 const brandsRouter = require("./routes/brands");
 const targetsRouter = require("./routes/targets");
 const faqsRouter = require("./routes/faqs");
-const formInputsRouter = require("./routes/formInputs");
+const feedbacksRouter = require("./routes/feedbacks");
 const adminsRouter = require("./routes/admins");
 
 connection.connect((err) => {
@@ -45,7 +45,7 @@ app.use("/sizes", sizesRouter);
 app.use("/brands", brandsRouter);
 app.use("/targets", targetsRouter);
 app.use("/faqs", faqsRouter);
-app.use("/formInputs", formInputsRouter);
+app.use("/feedbacks", feedbacksRouter);
 app.use("/admins", adminsRouter);
 
 connection.connect((err) => {
