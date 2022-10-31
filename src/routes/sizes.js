@@ -1,6 +1,9 @@
 const sizesRouter = require("express").Router();
 const connection = require("../config/db-config");
 const checkJwt = require("../middlewares/checkJwt");
+const {
+  validateSizesPost,
+} = require("../middlewares/validators/validatorSizes");
 
 // GET POUR PANNEAU ADMIN AdminSizes
 sizesRouter.get("/sizesAdmin", checkJwt, (req, res) => {
@@ -24,7 +27,7 @@ sizesRouter.get("/", (req, res) => {
       res.status(500).send("Error requesting GET sizes data");
     } else {
       res.status(200).json(result);
-      console.log("result", result);
+      // console.log("result", result);
     }
   });
 });
@@ -44,30 +47,7 @@ sizesRouter.get("/clotheEdit/:id", checkJwt, (req, res) => {
   });
 });
 
-// POST
-sizesRouter.post(
-  "/",
-  checkJwt,
-  // validatePostClothes,
-  (req, res) => {
-    console.log("req.body de sizeAdd", req.body);
-    const { size } = req.body;
-
-    const sqlAdd = "INSERT INTO sizes (size) VALUES (?)";
-    connection.query(sqlAdd, [size], (error, result) => {
-      if (error) {
-        res.status(500).json({
-          status: false,
-          message: "there are some error with query sizesAdd",
-        });
-        console.log("error", error);
-      } else {
-        res.status(200).json({ success: 1 });
-      }
-    });
-  }
-);
-
+// INTERFACE UTILISATEURS
 sizesRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   let sql =
@@ -83,11 +63,30 @@ sizesRouter.get("/:id", (req, res) => {
   });
 });
 
+// POST
+sizesRouter.post("/", checkJwt, validateSizesPost, (req, res) => {
+  // console.log("req.body de sizeAdd", req.body);
+  const { size } = req.body;
+
+  const sqlAdd = "INSERT INTO sizes (size) VALUES (?)";
+  connection.query(sqlAdd, [size], (error, result) => {
+    if (error) {
+      res.status(500).json({
+        status: false,
+        message: "there are some error with query sizesAdd",
+      });
+      console.log("error", error);
+    } else {
+      res.status(200).json({ success: 1 });
+    }
+  });
+});
+
 // DELETE /////////////////////////////////
 
 sizesRouter.delete("/:id", checkJwt, async (req, res) => {
   const sizeId = req.params.id;
-  console.log("sizeId", sizeId);
+  // console.log("sizeId", sizeId);
 
   connection.query(
     "DELETE FROM sizes WHERE id = ?",

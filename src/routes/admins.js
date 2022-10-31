@@ -8,7 +8,7 @@ const { generateJwt } = require("../utils/auth");
 const {
   validateAdminLogging,
   validateAdminRegistering,
-} = require("../middlewares/validators/validatorAdmin");
+} = require("../middlewares/validators/validatorAdmins");
 
 // INTERFACE ADMIN
 adminsRouter.get("/", checkJwt, (req, res) => {
@@ -47,8 +47,8 @@ adminsRouter.post("/login", validateAdminLogging, async (req, res) => {
       .status(403)
       .json({ success: 0, message: "L'utilisateur n'existe pas" });
   }
-  console.log("existingAdmin.hashedPassword", existingAdmin.hashedPassword);
-  console.log("req.body.password", req.body.password);
+  // console.log("existingAdmin.hashedPassword", existingAdmin.hashedPassword);
+  // console.log("req.body.password", req.body.password);
 
   const verified = await argon2.verify(
     existingAdmin.hashedPassword,
@@ -72,7 +72,7 @@ adminsRouter.post("/login", validateAdminLogging, async (req, res) => {
 
 adminsRouter.delete("/:id", checkJwt, async (req, res) => {
   const adminId = req.params.id;
-  console.log("adminId", adminId);
+  // console.log("adminId", adminId);
 
   connection.query(
     "DELETE FROM admins WHERE id = ?",

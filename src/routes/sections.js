@@ -1,6 +1,10 @@
 const sectionsRouter = require("express").Router();
 const connection = require("../config/db-config");
 const checkJwt = require("../middlewares/checkJwt");
+const {
+  validateSectionsPost,
+  validateSectionsPut,
+} = require("../middlewares/validators/validatorSections");
 
 // GET POUR PANNEAU ADMIN AdminSections
 sectionsRouter.get("/sectionsAdmin", checkJwt, (req, res) => {
@@ -45,35 +49,67 @@ sectionsRouter.get("/:id", (req, res) => {
   });
 });
 
-// POST
-sectionsRouter.post(
-  "/",
-  checkJwt,
-  // validatePostClothes,
-  (req, res) => {
-    console.log("req.body de sectionAdd", req.body);
-    const { name } = req.body;
+// GET POUR AFFICHAGE COULEURS DANS INTERFACE ADMIN EDIT
+sectionsRouter.get("/edit/:id", checkJwt, (req, res) => {
+  const { id } = req.params;
+  let sql = "SELECT * FROM sections WHERE id=?";
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error requesting GET sections data");
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
 
-    const sqlAdd = "INSERT INTO sections (name) VALUES (?)";
-    connection.query(sqlAdd, [name], (error, result) => {
-      if (error) {
-        res.status(500).json({
+// POST
+sectionsRouter.post("/", checkJwt, validateSectionsPost, (req, res) => {
+  // console.log("req.body de sectionAdd", req.body);
+  const { name } = req.body;
+
+  const sqlAdd = "INSERT INTO sections (name) VALUES (?)";
+  connection.query(sqlAdd, [name], (error, result) => {
+    if (error) {
+      res.status(500).json({
+        status: false,
+        message: "there are some error with query sectionsAdd",
+      });
+      console.log("error", error);
+    } else {
+      res.status(200).json({ success: 1 });
+    }
+  });
+});
+
+// PUT
+sectionsRouter.put("/:id", checkJwt, validateSectionsPut, async (req, res) => {
+  const { id } = req.params;
+  const sectionsPropsToUpdate = req.body;
+
+  connection.query(
+    "UPDATE sections SET ? WHERE id = ?",
+    [sectionsPropsToUpdate, id],
+    (err, result) => {
+      if (err) {
+        res.json({
           status: false,
-          message: "there are some error with query sectionsAdd",
+          message: "there are some error with query",
         });
-        console.log("error", error);
+        console.log(err);
       } else {
-        res.status(200).json({ success: 1 });
+        console.log("Saved successfully");
+        return res.status(200).json({ success: 1 });
       }
-    });
-  }
-);
+    }
+  );
+});
 
 // DELETE /////////////////////////////////
 
 sectionsRouter.delete("/:id", checkJwt, async (req, res) => {
   const sectionId = req.params.id;
-  console.log("sectionId", sectionId);
+  // console.log("sectionId", sectionId);
 
   connection.query(
     "DELETE FROM sections WHERE id = ?",

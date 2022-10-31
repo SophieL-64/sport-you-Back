@@ -1,8 +1,8 @@
 const Joi = require("joi");
 
 const adminLoggingSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(4).required(),
+  email: Joi.string().max(100).email().required(),
+  password: Joi.string().min(4).max(100).required(),
 });
 
 const validateAdminLogging = (req, res, next) => {
@@ -28,9 +28,9 @@ const validateAdminLogging = (req, res, next) => {
 };
 
 const adminRegisteringSchema = Joi.object({
-  adminName: Joi.string().required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(4).required(),
+  adminName: Joi.string().max(45).required(),
+  email: Joi.string().max(100).email().required(),
+  password: Joi.string().min(4).max(100).required(),
 });
 
 const validateAdminRegistering = (req, res, next) => {

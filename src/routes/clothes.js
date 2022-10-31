@@ -2,6 +2,10 @@ const clothesRouter = require("express").Router();
 const connection = require("../config/db-config");
 const { upload } = require("../helpers/helpersClothesFile");
 const checkJwt = require("../middlewares/checkJwt");
+const {
+  validateClothesPost,
+  validateClothesPut,
+} = require("../middlewares/validators/validatorClothes");
 const fs = require("fs");
 
 // GET POUR PANNEAU ADMIN AdminClothes
@@ -64,108 +68,99 @@ clothesRouter.get("/:id", (req, res) => {
 });
 
 // POST
-clothesRouter.post(
-  "/",
-  checkJwt,
-  upload,
-  // validatePostClothes,
-  (req, res) => {
-    let {
-      name,
-      description,
-      price,
-      sections_id,
-      brands_id,
-      targets_id,
-      sizesAvailables,
-      colorsAvailables,
-    } = req.body;
+clothesRouter.post("/", checkJwt, upload, validateClothesPost, (req, res) => {
+  // console.log("req.body de clothesAdd", req.body);
+  // console.log("image clothesAdd", req.files.image[0].filename);
+  let {
+    name,
+    description,
+    price,
+    sections_id,
+    brands_id,
+    targets_id,
+    sizesAvailables,
+    colorsAvailables,
+  } = req.body;
 
-    const image = req.files.image[0].filename;
+  const image = req.files.image[0].filename;
 
-    console.log("req.body de clothesAdd", req.body);
-    console.log("image clothesAdd", image);
-
-    const sqlAdd =
-      "INSERT INTO clothes(name, description, image, price, sections_id, brands_id, targets_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    connection.query(
-      sqlAdd,
-      [name, description, image, price, sections_id, brands_id, targets_id],
-      (error, result) => {
-        if (error) {
-          res.status(500).json({
-            status: false,
-            message:
-              "there are some error with query clothesAdd before jointures",
-          });
-          console.log("error", error);
-        } else {
-          const id = result.insertId;
-          let sizesJ = [];
-          sizesAvailables = sizesAvailables.split(",");
-          for (let i = 0; i < sizesAvailables.length; i++) {
-            sizesJ.push([id, sizesAvailables[i]]);
-            console.log("sizesJ", sizesJ);
-          }
-          connection.query(
-            "INSERT INTO clothes_has_sizes(clothes_id, sizes_id) VALUES ?",
-            [sizesJ],
-            (err, result) => {
-              if (err) {
-                console.log("erreur au niveau de la jointure Sizes", err);
-                res.status(500).json({
-                  status: false,
-                  message:
-                    "there are some error with query clothesAdd au niveau de la jointure Sizes",
-                });
-                return;
-              } else {
-                let colorsJ = [];
-                colorsAvailables = colorsAvailables.split(",");
-                for (let i = 0; i < colorsAvailables.length; i++) {
-                  colorsJ.push([id, colorsAvailables[i]]);
-                  console.log("colorsJ", colorsJ);
-                }
-                connection.query(
-                  "INSERT INTO clothes_has_colors(clothes_id, colors_id) VALUES ?",
-                  [colorsJ],
-                  (err, result) => {
-                    if (err) {
-                      console.log(
-                        "erreur au niveau de la jointure Colors",
-                        err
-                      );
-                      res.status(500).json({
-                        status: false,
-                        message:
-                          "there are some error with query clothesAdd au niveau de la jointure Colors",
-                      });
-                      return;
-                    } else {
-                      res.status(200).json({ success: 1 });
-                    }
-                  }
-                );
-              }
-            }
-          );
+  const sqlAdd =
+    "INSERT INTO clothes(name, description, image, price, sections_id, brands_id, targets_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  connection.query(
+    sqlAdd,
+    [name, description, image, price, sections_id, brands_id, targets_id],
+    (error, result) => {
+      if (error) {
+        res.status(500).json({
+          status: false,
+          message:
+            "there are some error with query clothesAdd before jointures",
+        });
+        console.log("error", error);
+      } else {
+        const id = result.insertId;
+        let sizesJ = [];
+        sizesAvailables = sizesAvailables.split(",");
+        for (let i = 0; i < sizesAvailables.length; i++) {
+          sizesJ.push([id, sizesAvailables[i]]);
+          console.log("sizesJ", sizesJ);
         }
+        connection.query(
+          "INSERT INTO clothes_has_sizes(clothes_id, sizes_id) VALUES ?",
+          [sizesJ],
+          (err, result) => {
+            if (err) {
+              console.log("erreur au niveau de la jointure Sizes", err);
+              res.status(500).json({
+                status: false,
+                message:
+                  "there are some error with query clothesAdd au niveau de la jointure Sizes",
+              });
+              return;
+            } else {
+              let colorsJ = [];
+              colorsAvailables = colorsAvailables.split(",");
+              for (let i = 0; i < colorsAvailables.length; i++) {
+                colorsJ.push([id, colorsAvailables[i]]);
+                console.log("colorsJ", colorsJ);
+              }
+              connection.query(
+                "INSERT INTO clothes_has_colors(clothes_id, colors_id) VALUES ?",
+                [colorsJ],
+                (err, result) => {
+                  if (err) {
+                    console.log("erreur au niveau de la jointure Colors", err);
+                    res.status(500).json({
+                      status: false,
+                      message:
+                        "there are some error with query clothesAdd au niveau de la jointure Colors",
+                    });
+                    return;
+                  } else {
+                    res.status(200).json({ success: 1 });
+                  }
+                }
+              );
+            }
+          }
+        );
       }
-    );
-  }
-);
+    }
+  );
+});
 
 // PUT
 clothesRouter.put(
   "/:id",
   checkJwt,
   upload,
-  // validatePostClothes,
+  validateClothesPut,
   async (req, res) => {
     const { id } = req.params;
     const sqlPut = "UPDATE clothes SET ? WHERE id = ?";
     const clothes = { ...req.body };
-    console.log("clothes", clothes);
+    // console.log("clothes", clothes);
+    console.log("type of clothes.price", typeof clothes.price);
     delete clothes.sizesAvailables;
     delete clothes.colorsAvailables;
     let sizesAvailables = req.body.sizesAvailables.split(",");
@@ -218,7 +213,7 @@ clothesRouter.put(
     }
 
     if (colorsAvailables.length) {
-      console.log("else", typeof colorsAvailables);
+      // console.log("else", typeof colorsAvailables);
       connection.query(
         "DELETE FROM clothes_has_colors WHERE clothes_id = ?",
         [id],
@@ -282,7 +277,7 @@ clothesRouter.put(
 
 clothesRouter.delete("/:id", checkJwt, async (req, res) => {
   const clotheId = req.params.id;
-  console.log("clotheId", clotheId);
+  // console.log("clotheId", clotheId);
 
   const [[imageOldPath]] = await connection
     .promise()
